@@ -12,12 +12,13 @@ public class Params {
 	public static final String PATH = "path"; 
 	// 超时时间
 	public static final String EXPIRATION = "expiration"; 
+	
 	/*
 	 *  该字段由第一次分块上传初始化请求的返回值获得，用来标识改上传的文件。
 	 *  
 	 *  只要该字段能标识上传的文件，那么就能支持断点续传，否则就不能支持
 	 *  
-	 *  save_token能标识改上传文件需要满足的条件（以初始化上传，分块上传，合并请求为一个原子操作）：
+	 *  save_token能标识该上传文件需要满足的条件（以初始化上传，分块上传，合并请求为一个原子操作）：
 	 *  1.原子操作中 "file_hash" 不变
 	 *  2.原子操作中 分块方式不变，即"file_size"和分块大小不变
 	 *  3.原子操作中 "path"不变

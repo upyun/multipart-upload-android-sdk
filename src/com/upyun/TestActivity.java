@@ -1,12 +1,6 @@
 package com.upyun;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.TreeSet;
-
-import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -15,10 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.upyun.block.api.utils.UpYunUtils;
-import com.upyun.block.api.common.Params;
 import com.upyun.block.api.main.Uploader;
 import com.upyun.block.api.main.CountingHttpEntity.ProgressListener;
 
@@ -32,7 +22,7 @@ public class TestActivity extends Activity {
 	private static final String localFilePath = Environment.getExternalStorageDirectory()
 			.getAbsolutePath() + File.separator + "test.jpg";
 	// 保存到又拍云的路径
-	String savePath = "/aaa.png";
+	String savePath = "/aaaaa.png";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,17 +36,17 @@ public class TestActivity extends Activity {
 		@Override
 		protected String doInBackground(Void... params) {
 			
-			ProgressListener listener = new ProgressListener(){
+			//设置进度条回掉函数
+			Uploader.listener = new ProgressListener(){
 				@Override
 				public void transferred(long transferedBytes, long totalBytes) {
+					//do something...
 					System.out.println("trans:"+transferedBytes+"; total:"+totalBytes);
 				}
 			};
-			
-			Uploader.listener = listener;
 
 			try {
-				JSONObject result = Uploader.upload(bucket, formApiSecret, localFilePath, savePath);
+				JSONObject result = Uploader.upload(bucket, formApiSecret, localFilePath, savePath, null);
 				System.out.println(result);
 			} catch (Exception e) {
 				e.printStackTrace();

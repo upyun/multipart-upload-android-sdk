@@ -21,9 +21,9 @@ import com.upyun.block.api.statics.Params;
 public class TestActivity extends Activity {
 
 	// 空间名
-	String bucket = "picture-test-spacee";
+	String bucket = "";
 	// 表单密钥
-	String formApiSecret = "w3mRPyWWOHwGoE0CN6C57AX9pac=";
+	String formApiSecret = "";
 	// 本地文件
 	private static final String localFilePath = Environment.getExternalStorageDirectory()
 			.getAbsolutePath() + File.separator + "test.jpg";
@@ -45,7 +45,6 @@ public class TestActivity extends Activity {
 
 		@Override
 		protected String doInBackground(Void... params) {
-			String string = null;
 
 			try {
 				// ==========初始化上传==========
@@ -57,7 +56,6 @@ public class TestActivity extends Activity {
 				paramsMap.put(Params.BLOCK_NUM, UpYunUtils.getBlockNum(localFile, blockSize));
 				paramsMap.put(Params.FILE_SIZE, localFile.length());
 				paramsMap.put(Params.FILE_MD5, UpYunUtils.md5Hex(new FileInputStream(localFile)));
-				// 还可以加上其他的额外处理参数...
 
 				// 计算policy
 				String policyForInitial = UpYunUtils.getPolicy(paramsMap);
@@ -67,18 +65,20 @@ public class TestActivity extends Activity {
 				JSONObject initialResult = Uploader.initialUpload(policyForInitial,
 						signatureForInitial, bucket);
 				if (initialResult.has("error_code")){
+					/* 出错时返回：
+					 * {"X-Request-Id":"11d88831c76213d9082457e55b8ff478","message":"Bucket NotFound.","error_code":40401,"code":404}
+					 * "X-Request-Id"说明：出现错误时，将该字段值提供给又拍云，可以用来排插错误
+					 */
 					System.out.println(initialResult.toString());
 					return null;
 				}
 				String saveToken = initialResult.optString(Params.SAVE_TOKEN);
 				String tokenSecret = initialResult.optString(Params.TOKEN_SECRET);
-				System.out.println("初始化上传--save_token:" + saveToken);
-				System.out.println("初始化上传--token_secret:" + tokenSecret);
 
 				// ==========上传分块==========
-				TreeSet<Integer> indexs = new TreeSet<Integer>();
-				// 每次上传一个分块都可以从返回值json中获取'status'参数来了解各个分块上传状况（1表示上传成功），以下模拟乱序上传
-				// indexs.add(4);
+				TreeSet<Integer> indexs = new TreeSet<Integer>(); //记录未上传的分块下标
+				// 每次上传一个分块都可以从返回值json中获取'status'参数来得到各个分块上传状况（1表示上传成功，0表示未上传），可以根据该字段得知当前的上传进度
+				indexs.add(4);
 				// indexs.add(6);
 				// indexs.add(3);
 				// indexs.add(2);
@@ -110,11 +110,6 @@ public class TestActivity extends Activity {
 			return "result";
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-		 */
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
@@ -124,6 +119,5 @@ public class TestActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "失败", Toast.LENGTH_LONG).show();
 			}
 		}
-
 	}
 }

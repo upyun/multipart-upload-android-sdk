@@ -1,4 +1,4 @@
-package com.upyun.block.api.statics;
+package com.upyun.block.api.common;
 
 public class Constant {
 	//块最小100KB

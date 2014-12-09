@@ -35,14 +35,28 @@ public class CountingHttpEntity extends HttpEntityWrapper {
             //super.write(b, off, len);
             out.write(b, off, len);            
             this.transferred += len;
+            this.transferred = trick(this.transferred, this.totalBytes);
             this.listener.transferred(this.transferred, this.totalBytes);
         }
 
         @Override
         public void write(final int b) throws IOException {
             out.write(b);
-            this.transferred++;
+            this.transferred ++;
+            this.transferred = trick(this.transferred, this.totalBytes);
             this.listener.transferred(this.transferred, this.totalBytes);
+        }
+        
+        private long trick(long transferred, long total){
+        	if (transferred > total) {
+        		transferred = total-1000;
+        		return transferred >= 0 ? transferred : 0;
+        	}
+        	return transferred;
+        }
+        
+        public static void changeTransferredBytes(){
+        	
         }
     }
 

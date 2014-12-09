@@ -22,7 +22,7 @@ public class TestActivity extends Activity {
 	private static final String localFilePath = Environment.getExternalStorageDirectory()
 			.getAbsolutePath() + File.separator + "test.jpg";
 	// 保存到又拍云的路径
-	String savePath = "/aaaaa.png";
+	String savePath = "/bbb.png";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,12 @@ public class TestActivity extends Activity {
 		@Override
 		protected String doInBackground(Void... params) {
 			
-			//设置进度条回掉函数
+			/*
+			 * 设置进度条回掉函数
+			 * 
+			 * 注意：由于在计算发送的字节数中包含了图片以外的其他信息，最终上传的大小总是大于图片实际大小，
+			 * 为了解决这个问题，代码会判断如果实际传送的大小大于图片，就将实际传送的大小设置成'totalBytes-1000'（最小为0）
+			 */
 			Uploader.listener = new ProgressListener(){
 				@Override
 				public void transferred(long transferedBytes, long totalBytes) {

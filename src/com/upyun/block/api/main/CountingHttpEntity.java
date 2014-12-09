@@ -31,8 +31,6 @@ public class CountingHttpEntity extends HttpEntityWrapper {
 
         @Override
         public void write(final byte[] b, final int off, final int len) throws IOException {
-            //// NO, double-counting, as super.write(byte[], int, int) delegates to write(int).
-            //super.write(b, off, len);
             out.write(b, off, len);            
             this.transferred += len;
             this.transferred = trick(this.transferred, this.totalBytes);

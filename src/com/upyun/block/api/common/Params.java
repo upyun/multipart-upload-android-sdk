@@ -37,4 +37,6 @@ public class Params {
 	public static final String CODE = "code";
 	// 分块上传情况
 	public static final String STATUS = "status";
+	
+	public static final String ERROR_CODE = "error_code";
 }

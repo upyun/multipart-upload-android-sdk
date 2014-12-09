@@ -3,14 +3,13 @@ package com.upyun;
 import java.io.File;
 import java.util.Map;
 
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.widget.Toast;
 
+import com.upyun.block.api.listener.CompleteListener;
 import com.upyun.block.api.listener.ProgressListener;
 import com.upyun.block.api.main.UploaderManager;
 import com.upyun.block.api.utils.UpYunUtils;
@@ -25,7 +24,7 @@ public class TestActivity extends Activity {
 	private String localFilePath = Environment.getExternalStorageDirectory()
 			.getAbsolutePath() + File.separator + "test2.jpg";
 	// 保存到又拍云的路径
-	String savePath = "/wxll.png";
+	String savePath = "/wxllll.png";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,13 +53,20 @@ public class TestActivity extends Activity {
 					}
 				};
 				
+				CompleteListener completeListener = new CompleteListener() {
+					@Override
+					public void result(boolean isComplete, String result, String error) {
+						// do something...
+						System.out.println("isComplete:"+isComplete+";result:"+result+";error:"+error);
+					}
+				};
+				
 				UploaderManager uploaderManager = UploaderManager.getInstance(bucket);
 				Map<String, Object> paramsMap = uploaderManager.fetchFileInfoDictionaryWith(localFile, savePath);
 				// signature & policy 建议从服务端获取
 				String policyForInitial = UpYunUtils.getPolicy(paramsMap);
 				String signatureForInitial = UpYunUtils.getSignature(paramsMap, formApiSecret);
-				JSONObject result = uploaderManager.upload(policyForInitial, signatureForInitial, localFile, progressListener);
-				System.out.println(result);
+				uploaderManager.upload(policyForInitial, signatureForInitial, localFile, progressListener, completeListener);
 				
 			} catch (Exception e) {
 				e.printStackTrace();

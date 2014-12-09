@@ -12,11 +12,6 @@ import com.upyun.block.api.listener.ProgressListener;
 
 public class CountingHttpEntity extends HttpEntityWrapper {
 	
-
-//    public static interface ProgressListener {
-//        void transferred(long transferedBytes, long totalBytes);
-//    }
-
     static class CountingOutputStream extends FilterOutputStream {
 
         private final ProgressListener listener;

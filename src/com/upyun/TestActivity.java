@@ -11,8 +11,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.widget.Toast;
 
+import com.upyun.block.api.listener.ProgressListener;
 import com.upyun.block.api.main.UploaderManager;
-import com.upyun.block.api.main.CountingHttpEntity.ProgressListener;
 import com.upyun.block.api.utils.UpYunUtils;
 
 public class TestActivity extends Activity {
@@ -25,7 +25,7 @@ public class TestActivity extends Activity {
 	private String localFilePath = Environment.getExternalStorageDirectory()
 			.getAbsolutePath() + File.separator + "test2.jpg";
 	// 保存到又拍云的路径
-	String savePath = "/wxl.png";
+	String savePath = "/wxll.png";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

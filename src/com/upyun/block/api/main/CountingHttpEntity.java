@@ -7,14 +7,15 @@ import java.io.OutputStream;
 
 import com.belladati.httpclientandroidlib.HttpEntity;
 import com.belladati.httpclientandroidlib.entity.HttpEntityWrapper;
+import com.upyun.block.api.listener.ProgressListener;
 
 
 public class CountingHttpEntity extends HttpEntityWrapper {
 	
 
-    public static interface ProgressListener {
-        void transferred(long transferedBytes, long totalBytes);
-    }
+//    public static interface ProgressListener {
+//        void transferred(long transferedBytes, long totalBytes);
+//    }
 
     static class CountingOutputStream extends FilterOutputStream {
 

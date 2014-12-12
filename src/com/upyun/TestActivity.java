@@ -17,14 +17,14 @@ import com.upyun.block.api.utils.UpYunUtils;
 public class TestActivity extends Activity {
 
 	// 空间名
-	String bucket = "picture-test-spacee";
+	String bucket = "picture-test-space";
 	// 表单密钥
 	String formApiSecret = "w3mRPyWWOHwGoE0CN6C57AX9pac=";
 	// 本地文件路径
 	private String localFilePath = Environment.getExternalStorageDirectory()
 			.getAbsolutePath() + File.separator + "test.jpg";
 	// 保存到又拍云的路径
-	String savePath = "/test12.png";
+	String savePath = "/test13.png";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

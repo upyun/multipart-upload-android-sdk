@@ -39,4 +39,7 @@ public class Params {
 	public static final String STATUS = "status";
 	
 	public static final String ERROR_CODE = "error_code";
+	public static final String X_Request_Id = "X-Request-Id";
+	public static final String MESSAGE = "message";
+	public static final String LOCATION = "location";
 }

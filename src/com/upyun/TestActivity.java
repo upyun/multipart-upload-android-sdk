@@ -63,7 +63,7 @@ public class TestActivity extends Activity {
 				
 				UploaderManager uploaderManager = UploaderManager.getInstance(bucket);
 				Map<String, Object> paramsMap = uploaderManager.fetchFileInfoDictionaryWith(localFile, savePath);
-//				paramsMap.put("return_url", "http://callback.meipai.com/medias/upload_photo_callback_upyun.json");
+				paramsMap.put("return_url", "www.google.com");
 				// signature & policy 建议从服务端获取
 				String policyForInitial = UpYunUtils.getPolicy(paramsMap);
 				String signatureForInitial = UpYunUtils.getSignature(paramsMap, formApiSecret);

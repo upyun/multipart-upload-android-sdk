@@ -24,7 +24,7 @@ public class TestActivity extends Activity {
 	private String localFilePath = Environment.getExternalStorageDirectory()
 			.getAbsolutePath() + File.separator + "test.jpg";
 	// 保存到又拍云的路径
-	String savePath = "/test23.png";
+	String savePath = "/test31.png";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,8 +62,9 @@ public class TestActivity extends Activity {
 				};
 				
 				UploaderManager uploaderManager = UploaderManager.getInstance(bucket);
+				uploaderManager.setTimeout(60, 60);
 				Map<String, Object> paramsMap = uploaderManager.fetchFileInfoDictionaryWith(localFile, savePath);
-				paramsMap.put("return_url", "www.google.com");
+//				paramsMap.put("return_url", "");
 				// signature & policy 建议从服务端获取
 				String policyForInitial = UpYunUtils.getPolicy(paramsMap);
 				String signatureForInitial = UpYunUtils.getSignature(paramsMap, formApiSecret);

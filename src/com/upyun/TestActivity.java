@@ -22,9 +22,9 @@ public class TestActivity extends Activity {
 	String formApiSecret = "w3mRPyWWOHwGoE0CN6C57AX9pac=";
 	// 本地文件路径
 	private String localFilePath = Environment.getExternalStorageDirectory()
-			.getAbsolutePath() + File.separator + "test.jpg";
+			.getAbsolutePath() + File.separator + "test2.jpg";
 	// 保存到又拍云的路径
-	String savePath = "/test32.png";
+	String savePath = "/test53.png";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class TestActivity extends Activity {
 				uploaderManager.setConnectTimeout(60);
 				uploaderManager.setResponseTimeout(60);
 				Map<String, Object> paramsMap = uploaderManager.fetchFileInfoDictionaryWith(localFile, savePath);
-//				paramsMap.put("return_url", "");
+//				paramsMap.put("return_url", "http://callback.meipai.com/medias/upload_photo_callback_upyun.json");
 				// signature & policy 建议从服务端获取
 				String policyForInitial = UpYunUtils.getPolicy(paramsMap);
 				String signatureForInitial = UpYunUtils.getSignature(paramsMap, formApiSecret);

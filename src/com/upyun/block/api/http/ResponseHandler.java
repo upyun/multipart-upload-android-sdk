@@ -1,8 +1,12 @@
 package com.upyun.block.api.http;
 
 import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Looper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.upyun.block.api.common.Params;
 import com.upyun.block.api.listener.LoadingCompleteListener;
 import com.upyun.block.api.listener.LoadingProgressListener;
 
@@ -19,12 +23,14 @@ public class ResponseHandler extends AsyncHttpResponseHandler{
 	@Override
 	public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable
 			 error) {
-		this.loadingCompleteListener.result(false, null, new String(responseBody));
+		String standardResponse = ResponseJson.errorResponseJsonFormat(statusCode, headers, responseBody);
+		this.loadingCompleteListener.result(false, null, standardResponse);
 	}
 
 	@Override
 	public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-		this.loadingCompleteListener.result(true, new String(responseBody), null);
+		String standardResponse = ResponseJson.okResposneJsonFormat(statusCode, headers, responseBody);
+		this.loadingCompleteListener.result(true, standardResponse, null);
 	}
 	
     @Override

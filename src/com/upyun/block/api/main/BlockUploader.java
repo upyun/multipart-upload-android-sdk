@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.loopj.android.http.RequestParams;
 import com.upyun.block.api.common.Params;
 import com.upyun.block.api.exception.UpYunException;
@@ -41,6 +43,7 @@ public class BlockUploader implements Runnable{
 	private RandomAccessFile randomAccessFile = null;
 	private long fileSize;
 	private int[] blockIndex;
+	private int historyUploadSize = 0;
 	
 	public BlockUploader(HttpManager httpManager, String host, String bucket, File localFile, int blockSize, long expiration,
 			String policy, String signature, ProgressListener progressListener, CompleteListener completeListener) {
@@ -62,12 +65,22 @@ public class BlockUploader implements Runnable{
 		try {
 			this.randomAccessFile = new RandomAccessFile(this.localFile, "r");
 			this.fileSize = this.localFile.length();
+			this.totalBlockNum = UpYunUtils.getBlockNum(this.localFile, this.blockSize);
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UpYunException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		nextTask(Params.INIT_REQUEST, -1);
 	}
 	
+	/**
+	 * index 为 blockIndex的下标
+	 * 
+	 * @param type
+	 * @param index
+	 */
 	private void nextTask(final String type, final int index) {
 		if (Params.INIT_REQUEST.equals(type)) {
 			RequestParams requestParams = new RequestParams();
@@ -121,7 +134,7 @@ public class BlockUploader implements Runnable{
 					if (!isSuccess) {
 						completeListener.result(false, null, error);
 					} else {
-						completeListener.result(false, response, null);
+						completeListener.result(true, response, null);
 					}
 				}
 			};
@@ -150,13 +163,22 @@ public class BlockUploader implements Runnable{
 				}
 			};
 			
-			final int uploadedSize = getUploadedSize(blockIndex, index);
 			LoadingProgressListener loadingProgressListener = new LoadingProgressListener() {
 				
 				@Override
 				public void onProgress(int bytesWritten, int blockSize) {
 					if (progressListener != null) {
-						progressListener.transferred(uploadedSize + bytesWritten, fileSize);
+						int showSize = historyUploadSize + bytesWritten;
+						if (showSize > fileSize) {              //do some trick
+							showSize = (int) (fileSize - 1000);
+							if (showSize < 0) {
+								showSize = 0;
+							}
+						}
+						progressListener.transferred(showSize, fileSize);
+						if (blockSize == bytesWritten) {
+							historyUploadSize = historyUploadSize + blockSize;
+						}
 					}
 				}
 			};
@@ -164,7 +186,7 @@ public class BlockUploader implements Runnable{
 			HashMap<String, Object> policyMap = new HashMap<String, Object>();
 			policyMap.put(Params.SAVE_TOKEN, saveToken);
 			policyMap.put(Params.EXPIRATION, expiration);
-			policyMap.put(Params.BLOCK_INDEX, index);
+			policyMap.put(Params.BLOCK_INDEX, blockIndex[index]);
 			policyMap.put(Params.BLOCK_MD5, UpYunUtils.md5Hex(block));
 			String policy = UpYunUtils.getPolicy(policyMap);
 			String signature = UpYunUtils.getSignature(policyMap, this.tokenSecret);
@@ -192,15 +214,26 @@ public class BlockUploader implements Runnable{
 	 * @return
 	 * @throws IOException
 	 */
-	private byte[] readBlockByIndex(int index) throws Exception {
+	private byte[] readBlockByIndex(int index) throws UpYunException {
 		if (index > this.totalBlockNum) {
+			Log.e("Block index error", "the index is bigger than totalBlockNum.");
 			throw new UpYunException("readBlockByIndex: the index is bigger than totalBlockNum.");
 		}
 		byte[] block = new byte[this.blockSize];
-		for (int i = 0; i < index; i++) {
-			randomAccessFile.read(block, 0, blockSize);
+		int readedSize = 0;
+		try {
+			int offset ;
+			if (blockIndex[index] == 0) {
+				offset = 0;
+			} else {
+				offset = (blockIndex[index]) * blockSize;
+			}
+			randomAccessFile.seek(offset);
+			readedSize = randomAccessFile.read(block, 0, blockSize);
+		} catch (IOException e) {
+			Log.e("file read error", e.getMessage(), e);
+			throw new UpYunException(e.getMessage());
 		}
-		int readedSize = randomAccessFile.read(block, 0, blockSize);
 		
 		// read last block, adjust byte size
 		if (readedSize < blockSize) {
@@ -231,16 +264,10 @@ public class BlockUploader implements Runnable{
 		for (int i = 0; i < array.length(); i++) {
 			if (array.getInt(i) == 0) {
 				blockIndex[index] = i;
+				index ++;
 			}
 		}
 		return blockIndex;
-	}
-	
-	private int getUploadedSize(int[] blockIndex, int index) {
-		if (blockIndex[index] == 0) {
-			return 0;
-		}
-		return (blockIndex[index]-1) * this.blockSize;
 	}
 
 }

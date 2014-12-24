@@ -42,4 +42,8 @@ public class Params {
 	public static final String X_Request_Id = "X-Request-Id";
 	public static final String MESSAGE = "message";
 	public static final String LOCATION = "location";
+	
+	public static final String INIT_REQUEST = "INIT_REQUEST";
+	public static final String BLOCK_UPLOAD = "BLOCK_UPLOAD";
+	public static final String MERGE_REQUEST = "MERGE_REQUESt";
 }

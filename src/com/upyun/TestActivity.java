@@ -17,14 +17,14 @@ import com.upyun.block.api.utils.UpYunUtils;
 public class TestActivity extends Activity {
 
 	// 空间名
-	String bucket = "";
+	String bucket = "picture-test-space";
 	// 表单密钥
-	String formApiSecret = "";
+	String formApiSecret = "w3mRPyWWOHwGoE0CN6C57AX9pac=";
 	// 本地文件路径
 	private String localFilePath = Environment.getExternalStorageDirectory()
 			.getAbsolutePath() + File.separator + "test.jpg";
 	// 保存到又拍云的路径
-	String savePath = "/test31.png";
+	String savePath = "/test32.png";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,8 @@ public class TestActivity extends Activity {
 				};
 				
 				UploaderManager uploaderManager = UploaderManager.getInstance(bucket);
-				uploaderManager.setTimeout(60, 60);
+				uploaderManager.setConnectTimeout(60);
+				uploaderManager.setResponseTimeout(60);
 				Map<String, Object> paramsMap = uploaderManager.fetchFileInfoDictionaryWith(localFile, savePath);
 //				paramsMap.put("return_url", "");
 				// signature & policy 建议从服务端获取

@@ -13,7 +13,7 @@ public class HttpManager {
 	
 	public HttpManager() {
 		client = new AsyncHttpClient();
-		client.setConnectTimeout(60*1000);
+		client.setConnectTimeout(60*1000);  //default 60s
 		client.setResponseTimeout(60*1000);
 	}
 	

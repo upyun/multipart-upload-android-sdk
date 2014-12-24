@@ -43,7 +43,12 @@ public class Params {
 	public static final String MESSAGE = "message";
 	public static final String LOCATION = "location";
 	
-	public static final String INIT_REQUEST = "INIT_REQUEST";
-	public static final String BLOCK_UPLOAD = "BLOCK_UPLOAD";
-	public static final String MERGE_REQUEST = "MERGE_REQUESt";
+	public static final String INIT_REQUEST = "INIT_REQUEST";  //初始化请求
+	public static final String BLOCK_UPLOAD = "BLOCK_UPLOAD";  //分块上传
+	public static final String MERGE_REQUEST = "MERGE_REQUESt";//合并请求
+	
+	public static final int INIT_REQUEST_ERROR = 50000;
+	public static final int BLOCK_UPLOAD_ERROR = 50001;
+	public static final int MERGE_REQUEST_ERROR = 50002;
+	public static final int FILE_ERROR = 50003;
 }

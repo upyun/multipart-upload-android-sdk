@@ -17,14 +17,14 @@ import com.upyun.block.api.utils.UpYunUtils;
 public class TestActivity extends Activity {
 
 	// 空间名
-	String bucket = "picture-test-space";
+	String bucket = "";
 	// 表单密钥
-	String formApiSecret = "w3mRPyWWOHwGoE0CN6C57AX9pac=";
+	String formApiSecret = "";
 	// 本地文件路径
 	private String localFilePath = Environment.getExternalStorageDirectory()
-			.getAbsolutePath() + File.separator + "test2.jpg";
+			.getAbsolutePath() + File.separator + "test.jpg";
 	// 保存到又拍云的路径
-	String savePath = "/test53.png";
+	String savePath = "/test55.png";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class TestActivity extends Activity {
 				 * 
 				 * 注意：由于在计算发送的字节数中包含了图片以外的其他信息，最终上传的大小总是大于图片实际大小，
 				 * 为了解决这个问题，代码会判断如果实际传送的大小大于图片
-				 * ，就将实际传送的大小设置成'totalBytes-1000'（最小为0）
+				 * ，就将实际传送的大小设置成'fileSize-1000'（最小为0）
 				 */
 				ProgressListener progressListener = new ProgressListener() {
 					@Override
@@ -65,7 +65,7 @@ public class TestActivity extends Activity {
 				uploaderManager.setConnectTimeout(60);
 				uploaderManager.setResponseTimeout(60);
 				Map<String, Object> paramsMap = uploaderManager.fetchFileInfoDictionaryWith(localFile, savePath);
-//				paramsMap.put("return_url", "http://callback.meipai.com/medias/upload_photo_callback_upyun.json");
+//				paramsMap.put("return_url", "");
 				// signature & policy 建议从服务端获取
 				String policyForInitial = UpYunUtils.getPolicy(paramsMap);
 				String signatureForInitial = UpYunUtils.getSignature(paramsMap, formApiSecret);

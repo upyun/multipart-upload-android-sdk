@@ -19,6 +19,7 @@ import com.upyun.block.api.common.Params;
 import com.upyun.block.api.exception.UpYunException;
 import com.upyun.block.api.http.HttpManager;
 import com.upyun.block.api.http.PostData;
+import com.upyun.block.api.http.ResponseJson;
 import com.upyun.block.api.listener.CompleteListener;
 import com.upyun.block.api.listener.LoadingCompleteListener;
 import com.upyun.block.api.listener.LoadingProgressListener;
@@ -69,7 +70,6 @@ public class BlockUploader implements Runnable{
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UpYunException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		nextTask(Params.INIT_REQUEST, -1);
@@ -110,6 +110,8 @@ public class BlockUploader implements Runnable{
 								nextTask(Params.BLOCK_UPLOAD, 0);
 							}
 						} catch (Exception err) {
+							String exceptionJson = ResponseJson.exceptionJsonFormat(Params.INIT_REQUEST_ERROR, err.getMessage());
+							completeListener.result(false, null, exceptionJson);
 							err.printStackTrace();
 						}
 					}
@@ -143,7 +145,9 @@ public class BlockUploader implements Runnable{
 			byte[] block = null;
 			try {
 				block = readBlockByIndex(index);
-			} catch (Exception e) {
+			} catch (UpYunException e) {
+				String exceptionJson = ResponseJson.exceptionJsonFormat(Params.BLOCK_UPLOAD_ERROR, e.getMessage());
+				completeListener.result(false, null, exceptionJson);
 				e.printStackTrace();
 			}
 			
@@ -190,6 +194,7 @@ public class BlockUploader implements Runnable{
 			policyMap.put(Params.BLOCK_MD5, UpYunUtils.md5Hex(block));
 			String policy = UpYunUtils.getPolicy(policyMap);
 			String signature = UpYunUtils.getSignature(policyMap, this.tokenSecret);
+			
 			Map<String ,String> map = new HashMap<String, String>();
 			map.put(Params.POLICY, policy);
 			map.put(Params.SIGNATURE, signature);
@@ -231,7 +236,6 @@ public class BlockUploader implements Runnable{
 			randomAccessFile.seek(offset);
 			readedSize = randomAccessFile.read(block, 0, blockSize);
 		} catch (IOException e) {
-			Log.e("file read error", e.getMessage(), e);
 			throw new UpYunException(e.getMessage());
 		}
 		

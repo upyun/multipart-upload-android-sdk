@@ -1,12 +1,8 @@
 package com.upyun.block.api.http;
 
 import org.apache.http.Header;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.Looper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.upyun.block.api.common.Params;
 import com.upyun.block.api.listener.LoadingCompleteListener;
 import com.upyun.block.api.listener.LoadingProgressListener;
 

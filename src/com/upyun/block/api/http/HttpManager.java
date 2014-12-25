@@ -1,9 +1,6 @@
 package com.upyun.block.api.http;
 
 import java.io.ByteArrayInputStream;
-
-import android.util.Log;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -38,8 +35,6 @@ public class HttpManager {
 	public void doPost(String URL, RequestParams requestParams, LoadingProgressListener loadingProgressListener,
 			LoadingCompleteListener loadingCompletionListener){
 		AsyncHttpResponseHandler handler = new ResponseHandler(loadingCompletionListener, loadingProgressListener);
-		Log.e("connectTimeout", client.getConnectTimeout()+"");
-		Log.e("responseTimeout", client.getResponseTimeout()+"");
 		client.post(URL, requestParams, handler);
 	}
 	

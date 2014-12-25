@@ -62,8 +62,8 @@ public class TestActivity extends Activity {
 				};
 				
 				UploaderManager uploaderManager = UploaderManager.getInstance(bucket);
-				uploaderManager.setConnectTimeout(20);
-				uploaderManager.setResponseTimeout(20);
+				uploaderManager.setConnectTimeout(60);
+				uploaderManager.setResponseTimeout(60);
 				Map<String, Object> paramsMap = uploaderManager.fetchFileInfoDictionaryWith(localFile, savePath);
 //				paramsMap.put("return_url", "");
 				// signature & policy 建议从服务端获取

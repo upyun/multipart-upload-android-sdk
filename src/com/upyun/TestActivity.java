@@ -24,7 +24,7 @@ public class TestActivity extends Activity {
 	private String localFilePath = Environment.getExternalStorageDirectory()
 			.getAbsolutePath() + File.separator + "test.jpg";
 	// 保存到又拍云的路径
-	String savePath = "/test55.png";
+	String savePath = "/test56.png";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,8 +62,8 @@ public class TestActivity extends Activity {
 				};
 				
 				UploaderManager uploaderManager = UploaderManager.getInstance(bucket);
-				uploaderManager.setConnectTimeout(60);
-				uploaderManager.setResponseTimeout(60);
+				uploaderManager.setConnectTimeout(20);
+				uploaderManager.setResponseTimeout(20);
 				Map<String, Object> paramsMap = uploaderManager.fetchFileInfoDictionaryWith(localFile, savePath);
 //				paramsMap.put("return_url", "");
 				// signature & policy 建议从服务端获取

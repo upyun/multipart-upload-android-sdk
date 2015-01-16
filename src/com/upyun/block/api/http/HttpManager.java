@@ -8,12 +8,12 @@ import com.upyun.block.api.listener.LoadingCompleteListener;
 import com.upyun.block.api.listener.LoadingProgressListener;
 
 public class HttpManager {
-	private AsyncHttpClient client;
+	private static AsyncHttpClient client = new AsyncHttpClient();
 	
 	public HttpManager() {
-		client = new AsyncHttpClient();
 		client.setConnectTimeout(60*1000);  //default 60s
 		client.setResponseTimeout(60*1000);
+		client.setEnableRedirects(true);
 	}
 	
 	/**
@@ -21,7 +21,7 @@ public class HttpManager {
 	 * @param connectTimeout 单位：s
 	 */
 	public void setConnectTimeout(int connectTimeout) {
-		this.client.setConnectTimeout(connectTimeout * 1000);
+		client.setConnectTimeout(connectTimeout * 1000);
 	}
 	
 	/**
@@ -29,7 +29,7 @@ public class HttpManager {
 	 * @param responseTimeout 单位：s
 	 */
 	public void setResponseTimeout(int responseTimeout) {
-		this.client.setResponseTimeout(responseTimeout * 1000);
+		client.setResponseTimeout(responseTimeout * 1000);
 	}
 	
 	public void doPost(String URL, RequestParams requestParams, LoadingProgressListener loadingProgressListener,

@@ -1,6 +1,9 @@
 package com.upyun.block.api.http;
 
 import java.io.ByteArrayInputStream;
+
+import org.apache.http.client.params.ClientPNames;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -14,6 +17,7 @@ public class HttpManager {
 		client.setConnectTimeout(60*1000);  //default 60s
 		client.setResponseTimeout(60*1000);
 		client.setEnableRedirects(true);
+		client.getHttpClient().getParams().setParameter(ClientPNames.MAX_REDIRECTS, 3);
 	}
 	
 	/**

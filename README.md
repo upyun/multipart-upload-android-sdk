@@ -1,3 +1,41 @@
+### SDK 使用方式
+
+``` java
+
+ProgressListener progressListener = new ProgressListener() {
+					@Override
+					public void transferred(long transferedBytes, long totalBytes) {
+						// do something...
+						System.out.println("trans:" + transferedBytes + "; total:" + totalBytes);
+					}
+				};
+				
+				CompleteListener completeListener = new CompleteListener() {
+					@Override
+					public void result(boolean isComplete, String result, String error) {
+						// do something...
+						System.out.println("isComplete:"+isComplete+";result:"+result+";error:"+error);
+					}
+				};
+				
+				UploaderManager uploaderManager = UploaderManager.getInstance(bucket);
+				uploaderManager.setConnectTimeout(60);  //设置超时时间
+				uploaderManager.setResponseTimeout(60);
+				uploaderManager.setHost("http://m0.api.upyun.com/");//设置又拍云host，默认为:http://m0.api.upyun.com/
+				uploaderManager.setBlockSize(500 * 1024);//分块最小为500 * 1024，如果小于改值将抛出异常
+				uploaderManager.setExpiration(60*1000);//设置超时时间，默认60s
+				
+				Map<String, Object> paramsMap = uploaderManager.fetchFileInfoDictionaryWith(localFile, savePath);
+				paramsMap.put("return_url", "http://httpbin.org/get"); //设置回调地址
+				// signature & policy 建议从服务端获取
+				String policyForInitial = UpYunUtils.getPolicy(paramsMap);
+				String signatureForInitial = UpYunUtils.getSignature(paramsMap, formApiSecret);
+				uploaderManager.upload(policyForInitial, signatureForInitial, localFile, progressListener, completeListener);
+				
+
+```
+
+
 ### 返回值说明
 
 #### 成功

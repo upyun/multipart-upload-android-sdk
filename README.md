@@ -1,5 +1,7 @@
 ### SDK 使用方式
 
+将release/multipart-upload-android-sdk.jar 放到项目lib文件夹中
+
 ``` java
 
 //上传进度回调函数

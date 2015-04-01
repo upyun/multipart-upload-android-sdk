@@ -65,6 +65,7 @@ public class TestActivity extends Activity {
 				uploaderManager.setConnectTimeout(60);
 				uploaderManager.setResponseTimeout(60);
 				Map<String, Object> paramsMap = uploaderManager.fetchFileInfoDictionaryWith(localFile, savePath);
+				//还可以加上其他的额外处理参数...
 				paramsMap.put("return_url", "http://httpbin.org/get");
 				// signature & policy 建议从服务端获取
 				String policyForInitial = UpYunUtils.getPolicy(paramsMap);

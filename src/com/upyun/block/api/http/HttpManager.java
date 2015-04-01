@@ -1,6 +1,9 @@
 package com.upyun.block.api.http;
 
 import java.io.ByteArrayInputStream;
+
+import org.apache.http.client.params.ClientPNames;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -8,12 +11,13 @@ import com.upyun.block.api.listener.LoadingCompleteListener;
 import com.upyun.block.api.listener.LoadingProgressListener;
 
 public class HttpManager {
-	private AsyncHttpClient client;
+	private static AsyncHttpClient client = new AsyncHttpClient();
 	
 	public HttpManager() {
-		client = new AsyncHttpClient();
 		client.setConnectTimeout(60*1000);  //default 60s
 		client.setResponseTimeout(60*1000);
+		client.setEnableRedirects(true);
+		client.getHttpClient().getParams().setParameter(ClientPNames.MAX_REDIRECTS, 3);
 	}
 	
 	/**
@@ -21,7 +25,7 @@ public class HttpManager {
 	 * @param connectTimeout 单位：s
 	 */
 	public void setConnectTimeout(int connectTimeout) {
-		this.client.setConnectTimeout(connectTimeout * 1000);
+		client.setConnectTimeout(connectTimeout * 1000);
 	}
 	
 	/**
@@ -29,7 +33,7 @@ public class HttpManager {
 	 * @param responseTimeout 单位：s
 	 */
 	public void setResponseTimeout(int responseTimeout) {
-		this.client.setResponseTimeout(responseTimeout * 1000);
+		client.setResponseTimeout(responseTimeout * 1000);
 	}
 	
 	public void doPost(String URL, RequestParams requestParams, LoadingProgressListener loadingProgressListener,

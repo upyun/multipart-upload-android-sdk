@@ -1,17 +1,5 @@
 package com.upyun.block.api.main;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.util.Log;
 
 import com.loopj.android.http.RequestParams;
@@ -25,6 +13,18 @@ import com.upyun.block.api.listener.LoadingCompleteListener;
 import com.upyun.block.api.listener.LoadingProgressListener;
 import com.upyun.block.api.listener.ProgressListener;
 import com.upyun.block.api.utils.UpYunUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlockUploader implements Runnable{
 	private String host = "http://m0.api.upyun.com/";
@@ -44,7 +44,7 @@ public class BlockUploader implements Runnable{
 	private RandomAccessFile randomAccessFile = null;
 	private long fileSize;
 	private int[] blockIndex;
-	private int historyUploadSize = 0;
+	private long historyUploadSize = 0;
 	
 	public BlockUploader(HttpManager httpManager, String host, String bucket, File localFile, int blockSize, long expiration,
 			String policy, String signature, ProgressListener progressListener, CompleteListener completeListener) {
@@ -170,9 +170,9 @@ public class BlockUploader implements Runnable{
 			LoadingProgressListener loadingProgressListener = new LoadingProgressListener() {
 				
 				@Override
-				public void onProgress(int bytesWritten, int blockSize) {
+				public void onProgress(long bytesWritten, long blockSize) {
 					if (progressListener != null) {
-						int showSize = historyUploadSize + bytesWritten;
+						long showSize = historyUploadSize + bytesWritten;
 						if (showSize > fileSize) {              //do some trick
 							showSize = (int) (fileSize - 1000);
 							if (showSize < 0) {
@@ -200,7 +200,7 @@ public class BlockUploader implements Runnable{
 			map.put(Params.SIGNATURE, signature);
 			PostData postData = new PostData();
 			postData.data = block;
-			postData.fileName = "block";
+			postData.fileName = localFile.getName();
 			postData.params = map;
 			httpManager.doMutipartPost(getUrl(this.bucket), postData, loadingProgressListener, loadingCompeteListener);
 		}

@@ -1,12 +1,15 @@
 package com.upyun.block.api.http;
 
-import org.apache.http.Header;
 import android.os.Looper;
+
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.upyun.block.api.listener.LoadingCompleteListener;
 import com.upyun.block.api.listener.LoadingProgressListener;
 
-public class ResponseHandler extends AsyncHttpResponseHandler{
+import cz.msebera.android.httpclient.Header;
+
+
+public class ResponseHandler extends AsyncHttpResponseHandler {
 	private LoadingCompleteListener loadingCompleteListener;
 	private LoadingProgressListener loadingProgressListener;
 	
@@ -30,7 +33,7 @@ public class ResponseHandler extends AsyncHttpResponseHandler{
 	}
 	
     @Override
-    public void onProgress(int bytesWritten, int totalSize) {
+    public void onProgress(long bytesWritten, long totalSize) {
         if (loadingProgressListener != null) {
         	loadingProgressListener.onProgress(bytesWritten, totalSize);
         }

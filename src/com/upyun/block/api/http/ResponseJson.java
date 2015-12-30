@@ -1,10 +1,11 @@
 package com.upyun.block.api.http;
 
-import org.apache.http.Header;
+import com.upyun.block.api.common.Params;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.upyun.block.api.common.Params;
+import cz.msebera.android.httpclient.Header;
 
 public class ResponseJson {
 	public static String errorResponseJsonFormat(int statusCode, Header[] headers, byte[] responseBody) {

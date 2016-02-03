@@ -1,3 +1,5 @@
+##这个 SDK 将不再维护, 请使用[新版SDK](https://github.com/upyun/android-sdk)
+
 
 ### 返回值说明
 
